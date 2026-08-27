@@ -1,0 +1,26 @@
+server:
+  port: 8083
+
+spring:
+  application:
+    name: gateway
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+    gateway:
+      server:
+        webflux:
+          routes:
+            - id: book-stock-route
+              uri: lb://book-stock
+              predicates:
+                - Path=/book-stock/**
+              filters:
+                - StripPrefix=1
+            - id: order-service-route
+              uri: lb://order-service
+              predicates:
+                - Path=/order-service/**
+              filters:
+                - StripPrefix=1
