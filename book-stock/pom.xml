@@ -15,6 +15,10 @@
     <name>book-stock</name>
 
     <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
         <!-- book-stock 特有的依赖 -->
         <dependency>
             <groupId>com.h2database</groupId>

@@ -1,0 +1,11 @@
+.idea/
+*.iml
+target/
+*.class
+.mvn/
+shelf/
+workspace.xml
+httpRequests/
+queries/
+dataSources/
+dataSources.local.xml

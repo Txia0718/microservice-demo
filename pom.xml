@@ -25,9 +25,10 @@
         <java.version>25</java.version>
         <spring-cloud-alibaba.version>2025.1.0.0</spring-cloud-alibaba.version>
         <mybatis-plus.version>3.5.15</mybatis-plus.version>
-        <loadbalancer.version>4.1.3</loadbalancer.version>
+        <loadbalancer.version>5.0.3</loadbalancer.version>
         <bcprov.version>1.84</bcprov.version>
         <spring-cloud.version>2025.1.2</spring-cloud.version>
+        <gateway.version>5.0.3</gateway.version>
     </properties>
 
     <!-- 子模块列表 -->
@@ -71,15 +72,16 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-gateway-server-webflux</artifactId>
+                <version>${gateway.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
     <!-- 所有子模块共享的公共依赖 -->
     <dependencies>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
