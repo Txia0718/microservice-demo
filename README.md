@@ -9,6 +9,7 @@
 - API 网关统一入口（Spring Cloud Gateway）
 - 乐观锁防超卖（MyBatis-Plus @Version）
 - 流量治理与高可用防护（Sentinel 限流 + 熔断降级）
+- 多模块 Maven 工程（common 模块统一管理共享实体类）
 
 ## 🛠️ 技术栈
 - Spring Boot 4.1.0
@@ -24,6 +25,7 @@
 ## 📦 模块说明
 | 模块 | 端口 | 说明 |
 |------|------|------|
+| `common` | - | 共享实体类（纯 POJO，无 ORM 注解） |
 | `book-stock` | 8081 | 库存服务，提供图书查询和扣库存接口（仅内部调用） |
 | `order-service` | 8082 | 订单服务，通过 OpenFeign 远程调用库存服务，外部统一入口 |
 | `gateway` | 8083 | API 网关，统一入口，仅转发 `/order-service/**` 路由 |
@@ -42,13 +44,20 @@
 进入 `nacos/bin/` 目录，双击 `startup.cmd`（Windows）或执行 `./startup.sh -m standalone`（Mac/Linux）。
 访问 `http://localhost:8848/nacos`，用户名/密码：`nacos`/`nacos`
 
-### 2. 启动 book-stock
+### 2. 启动 Sentinel 控制台（可选）
+进入 `sentinel-dashboard-1.8.10.jar` 所在目录，执行：
+```bash
+java -Dserver.port=8858 -Dcsp.sentinel.dashboard.server=localhost:8858 -jar sentinel-dashboard-1.8.10.jar
+```
+访问 `http://localhost:8858`，用户名/密码：`sentinel`/`sentinel`
+
+### 3. 启动 book-stock
 在 IDEA 中运行 `BookStockApplication`
 
-### 3. 启动 order-service
+### 4. 启动 order-service
 在 IDEA 中运行 `OrderServiceApplication`
 
-### 4. 启动 gateway
+### 5. 启动 gateway
 在 IDEA 中运行 `GatewayApplication`
 
 ## 🧪 测试接口（通过网关调用）
@@ -62,3 +71,8 @@ curl "http://localhost:8083/order-service/book/1"
 
 # 下单（扣库存）
 curl -X POST "http://localhost:8083/order-service/create?bookId=1&quantity=1"
+```
+
+---
+
+> 📌 **下一步计划**：实现 Sentinel 规则持久化到 Nacos，解决服务重启后规则丢失问题。
