@@ -1,7 +1,7 @@
 package com.demo.orderservice.service;
 
+import com.demo.common.entity.Book;
 import com.demo.orderservice.client.BookStockClient;
-import com.demo.orderservice.entity.Book;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

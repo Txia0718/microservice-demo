@@ -1,6 +1,6 @@
 package com.demo.orderservice.controller;
 
-import com.demo.orderservice.entity.Book;
+import com.demo.common.entity.Book;
 import com.demo.orderservice.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

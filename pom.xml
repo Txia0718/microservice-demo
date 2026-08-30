@@ -36,6 +36,7 @@
         <module>book-stock</module>
         <module>order-service</module>
         <module>gateway</module>
+        <module>common</module>
     </modules>
 
     <!-- 版本锁定（子模块继承，无需重复指定版本） -->
@@ -76,6 +77,11 @@
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-starter-gateway-server-webflux</artifactId>
                 <version>${gateway.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.demo</groupId>
+                <artifactId>common</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

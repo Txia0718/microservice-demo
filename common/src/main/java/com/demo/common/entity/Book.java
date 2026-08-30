@@ -1,4 +1,4 @@
-package com.demo.orderservice.entity;
+package com.demo.common.entity;
 
 import lombok.Data;
 
