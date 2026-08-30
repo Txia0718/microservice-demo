@@ -12,12 +12,6 @@ spring:
       server:
         webflux:
           routes:
-            - id: book-stock-route
-              uri: lb://book-stock
-              predicates:
-                - Path=/book-stock/**
-              filters:
-                - StripPrefix=1
             - id: order-service-route
               uri: lb://order-service
               predicates:
