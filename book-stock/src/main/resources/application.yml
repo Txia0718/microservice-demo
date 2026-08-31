@@ -25,6 +25,19 @@ spring:
         dashboard: localhost:8858
         port: 8719
       eager: true
+      datasource:
+        flow-rules: # 流控规则数据源（名字可自定义）
+          nacos:
+            server-addr: 127.0.0.1:8848
+            dataId: book-stock-flow-rules
+            groupId: SENTINEL_GROUP
+            rule-type: flow
+        degrade-rules: # 熔断规则数据源
+          nacos:
+            server-addr: 127.0.0.1:8848
+            dataId: book-stock-degrade-rules
+            groupId: SENTINEL_GROUP
+            rule-type: degrade
 mybatis-plus:
   configuration:
     map-underscore-to-camel-case: true
