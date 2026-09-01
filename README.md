@@ -1,7 +1,7 @@
 # 📚 微服务学习实践 - 库存服务 + 订单服务 + API 网关
 
 ## 📌 项目简介
-这是一个基于 **Spring Boot 4.1 + Spring Cloud Gateway + Nacos + Sentinel + OpenFeign + MyBatis-Plus** 的微服务学习项目。
+这是一个基于 **Spring Boot 4.1 + Spring Cloud Gateway + Nacos + Sentinel + OpenFeign + MyBatis-Plus** 的微服务学习项目。  
 模拟了“图书下单扣库存”的业务场景，实现了：
 
 - 服务注册与发现（Nacos）
@@ -31,19 +31,20 @@
 | `gateway` | 8083 | API 网关，统一入口，仅转发 `/order-service/**` 路由 |
 
 ## 🛡️ 流量治理（Sentinel）
-项目已集成 Sentinel，为核心服务提供高可用防护：
+项目已集成 Sentinel，构建了 **网关 → 订单服务 → 库存服务** 三层防护体系：
 
-- **订单服务 (order-service)**：针对 `/create` 写接口配置了 **QPS 限流**（每秒 3 个请求）和 **熔断降级**（慢调用比例触发），保护下单链路。
-- **库存服务 (book-stock)**：内部配置了 **熔断降级**，防止慢查询拖垮 Feign 调用链路。
+- **网关层 (gateway)**：针对 `order-service-route` 路由配置了 **QPS 限流**（每秒 10 个请求），在入口处拦截超限流量，保护所有后端服务。
+- **订单服务 (order-service)**：针对 `/create` 写接口配置了 **QPS 限流**（每秒 3 个请求）和 **熔断降级**（慢调用比例触发），保护下单链路；针对 `/book/{id}` 读接口配置了 **QPS 限流**（每秒 20 个请求）和 **熔断降级**（RT > 200ms）。
+- **库存服务 (book-stock)**：内部配置了 **熔断降级**（`/book/{id}` RT > 200ms，`/order/buy` RT > 1000ms），防止慢查询拖垮 Feign 调用链路。
 - **Feign + Sentinel**：订单服务通过 OpenFeign 调用库存服务时，整合 Sentinel 实现调用超时熔断和降级兜底。
-- **规则持久化**：限流/熔断规则已通过 Nacos 数据源实现持久化，服务重启后规则自动加载，无需重新配置。
+- **规则持久化**：所有限流/熔断规则已通过 **Nacos 数据源**实现持久化，服务重启后规则自动加载，无需重新配置。
 
 ## 🚀 快速启动
 ### 1. 启动 Nacos
-进入 `nacos/bin/` 目录，双击 `startup.cmd`（Windows）或执行 `./startup.sh -m standalone`（Mac/Linux）。
+进入 `nacos/bin/` 目录，双击 `startup.cmd`（Windows）或执行 `./startup.sh -m standalone`（Mac/Linux）。  
 访问 `http://localhost:8848/nacos`，用户名/密码：`nacos`/`nacos`
 
-### 2. 启动 Sentinel 控制台（可选）
+### 2. 启动 Sentinel 控制台
 进入 `sentinel-dashboard-1.8.10.jar` 所在目录，执行：
 ```bash
 java -Dserver.port=8858 -Dcsp.sentinel.dashboard.server=localhost:8858 -jar sentinel-dashboard-1.8.10.jar
@@ -74,4 +75,4 @@ curl -X POST "http://localhost:8083/order-service/create?bookId=1&quantity=1"
 
 ---
 
-> 📌 **下一步计划**：探索网关层限流（Gateway + Sentinel），在入口处统一拦截超限流量，为后续链路追踪（Micrometer + Zipkin）做准备。
+> 📌 **下一步计划**：探索链路追踪（Micrometer + Zipkin），可视化查看请求在网关 → 订单 → 库存之间的调用链路和耗时。
